@@ -66,6 +66,7 @@ class ActionResource(Resource):
         self.uri = uri
         self.method = method
         self.cls = cls
+        self.func_name = self.__class__.__name__
 
     def post_call(self, session, new_obj=None):
         pass
@@ -81,6 +82,13 @@ class ActionResource(Resource):
         else:
             self.post_call(session)
             return None
+
+class ImageResource(ActionResource):
+    def __call__(self, session, **kwargs):
+        urlparams, body, headers = self.prepare_to_send(self.method, **kwargs)
+        body, meta = session.request(self.method, self.uri, body, urlparams, headers)
+        data, meta = self.process_result(body, meta)
+        return data
 
 class InstanceResource(Resource):
     def __init__(self, session, body=None, meta=None, urlparams=None):

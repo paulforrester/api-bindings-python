@@ -2,7 +2,7 @@
 class EagleeyenetworksError(Exception):
 
     def __init__(self, message=None, http_body=None, http_status=None,
-                 json_body=None):
+                 json_body=None, url=None):
         super(EagleeyenetworksError, self).__init__(message)
 
         if http_body and hasattr(http_body, 'decode'):
@@ -16,6 +16,7 @@ class EagleeyenetworksError(Exception):
 
         self.http_status = http_status
         self.json_body = json_body
+        self.url = url
 
 
 class APIError(EagleeyenetworksError):

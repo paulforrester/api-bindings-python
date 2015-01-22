@@ -31,4 +31,14 @@ class Session(object):
                 raise APIError(
                     "Invalid response body from API: %s "
                     "(HTTP response code was %d)" % (resp.content, resp.status_code),
-                    resp.content, resp.status_code)
+                    http_body=resp.content, http_status=resp.status_code, url=resp.url)
+        elif resp.status_code == 401 or resp.status_code == 403:
+            raise APIError(
+                "Authentication Error from API: %s "
+                "(HTTP response code was %d)" % (resp.content, resp.status_code),
+                http_body=resp.content, http_status=resp.status_code, url=resp.url)
+        else:
+            raise APIError(
+                "Error from API: %s "
+                "(HTTP response code was %d)" % (resp.content, resp.status_code),
+                http_body=resp.content, http_status=resp.status_code, url=resp.url)
